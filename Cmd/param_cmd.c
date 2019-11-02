@@ -141,7 +141,9 @@ void param_cmd(int argc, char* argv[])
   {
     if(strcmp("save", argv[1]) == 0)
     {
+      vPortEnterCritical();
       SaveParam(&param);
+      vPortExitCritical();
     }
     else if(strcmp("get", argv[1]) == 0)
     {
@@ -149,8 +151,10 @@ void param_cmd(int argc, char* argv[])
     }
     else if(strcmp("reset", argv[1]) == 0)
     {
+      vPortEnterCritical();
       SaveParam((void *)&DefaultParam);
       InitParam();
+      vPortExitCritical();
     }
     else 
     {
