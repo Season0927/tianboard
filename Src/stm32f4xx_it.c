@@ -37,7 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
- 
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -77,7 +77,7 @@ extern TIM_HandleTypeDef htim6;
 /* USER CODE END EV */
 
 /******************************************************************************/
-/*           Cortex-M4 Processor Interruption and Exception Handlers          */ 
+/*           Cortex-M4 Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
   * @brief This function handles Non maskable interrupt.
@@ -266,16 +266,18 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-  if(USART1->SR & UART_FLAG_IDLE)
-	{    
+  if (USART1->SR & UART_FLAG_IDLE)
+  {
     HAL_UART_AbortReceive(&huart1);
-    
-    pDbusMsg->MsgLen = DBUS_MSG_LEN - huart1.hdmarx->Instance->NDTR;
 
-    osMailPut(DbusMail, pDbusMsg);
-    
-    pDbusMsg = osMailAlloc(DbusMail, 0); 
-    if(pDbusMsg == NULL)
+    if (pDbusMsg != NULL)
+    {
+      pDbusMsg->MsgLen = DBUS_MSG_LEN - huart1.hdmarx->Instance->NDTR;
+
+      osMailPut(DbusMail, pDbusMsg);
+    }
+    pDbusMsg = osMailAlloc(DbusMail, 0);
+    if (pDbusMsg == NULL)
     {
       //error
     }
@@ -283,7 +285,7 @@ void USART1_IRQHandler(void)
     {
       HAL_UART_Receive_DMA(&huart1, pDbusMsg->Msg, DBUS_MSG_LEN);
     }
-	}
+  }
   /* USER CODE END USART1_IRQn 1 */
 }
 
@@ -293,18 +295,26 @@ void USART1_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
-  if(USART2->SR & UART_FLAG_RXNE)
+  if (USART2->SR & UART_FLAG_RXNE)
   {
-    *pTerminalMsg = USART2->DR;
-    osMailPut(TerminalRxMail, pTerminalMsg);
-    
-    pTerminalMsg = osMailAlloc(TerminalRxMail, 0); 
-    if(pTerminalMsg == NULL)
+    if (pTerminalMsg != NULL)
+    {
+      *pTerminalMsg = USART2->DR;
+      osMailPut(TerminalRxMail, pTerminalMsg);
+    }
+    else
+    {
+      uint8_t temp = USART2->DR;
+      UNUSED(temp);
+    }
+
+    pTerminalMsg = osMailAlloc(TerminalRxMail, 0);
+    if (pTerminalMsg == NULL)
     {
       //error
     }
   }
-  if(USART2->SR & UART_FLAG_TC)
+  if (USART2->SR & UART_FLAG_TC)
   {
     osSignalSet(TerminalTxTaskHandle, UART_TX_FINISH);
     __HAL_UART_CLEAR_FLAG(&huart2, UART_FLAG_TC);
@@ -382,16 +392,17 @@ void UART7_IRQHandler(void)
   /* USER CODE END UART7_IRQn 0 */
   HAL_UART_IRQHandler(&huart7);
   /* USER CODE BEGIN UART7_IRQn 1 */
-  if(UART7->SR & UART_FLAG_IDLE)
-	{    
+  if (UART7->SR & UART_FLAG_IDLE)
+  {
     HAL_UART_AbortReceive(&huart7);
-    
-    pProtocolMsg->MsgLen = PROTOCOL_MSG_LEN - huart7.hdmarx->Instance->NDTR;
+    if (pProtocolMsg != NULL)
+    {
+      pProtocolMsg->MsgLen = PROTOCOL_MSG_LEN - huart7.hdmarx->Instance->NDTR;
 
-    osMailPut(ProtocolRxMail, pProtocolMsg);
-    
-    pProtocolMsg = osMailAlloc(ProtocolRxMail, 0); 
-    if(pProtocolMsg == NULL)
+      osMailPut(ProtocolRxMail, pProtocolMsg);
+    }
+    pProtocolMsg = osMailAlloc(ProtocolRxMail, 0);
+    if (pProtocolMsg == NULL)
     {
       //error
     }
@@ -399,7 +410,7 @@ void UART7_IRQHandler(void)
     {
       HAL_UART_Receive_DMA(&huart7, pProtocolMsg->Msg, PROTOCOL_MSG_LEN);
     }
-	}
+  }
   /* USER CODE END UART7_IRQn 1 */
 }
 
