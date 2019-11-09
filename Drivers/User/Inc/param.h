@@ -16,11 +16,11 @@
 
 #define SIN_60 0.8660254f
 #define COS_60 0.5f
-
+/******************************
 //              ^^
 //              ^^
 //              ||
-//      
+//
 //         m1 | -- | m2
 //            |    |
 //         m3 | -- | m4
@@ -31,12 +31,14 @@
 //          A---   |B
 //            /  \
 //           /    \
+*******************************/
+typedef struct
+{
+  float base_a; //width/2 left to center
+  float base_b; //length/2 front to center
+} __PACKED MecanumBaseParam_t;
 
-typedef struct{
-  float base_a;//width/2 left to center
-  float base_b;//length/2 front to center
-}MecanumBaseParam_t;
-
+/******************************
 //            ^^
 //            ^^
 //            ||
@@ -47,37 +49,42 @@ typedef struct{
 //             /\
 //            /  \
 //           m3   m2
+*******************************/
 
-typedef struct{
+typedef struct
+{
   float base_r;
-}OmniBaseParam_t;
+} __PACKED OmniBaseParam_t;
 
-typedef struct{
+typedef struct
+{
   float p;
   float i;
   float d;
   float max_out;
   float i_limit;
-}PidParam_t;
+} __PACKED PidParam_t;
 
-typedef struct{
+typedef struct
+{
   uint32_t param_head;
   float wheel_r;
   float moto_reduction_ratio;
   float max_w;
   float max_speed;
   uint32_t base_type;
-  struct{
+  struct __PACKED
+  {
     MecanumBaseParam_t mecanum;
     OmniBaseParam_t omni;
-  }base;
+  } base;
   PidParam_t pid;
   int ctrl_period;
   int feedback_period;
   int pose_calc_period;
   char desc[32];
   uint32_t param_tail;
-}Param_t;
+} __PACKED Param_t;
 
 extern Param_t param;
 extern const Param_t DefaultParam;

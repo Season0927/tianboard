@@ -3,13 +3,14 @@
 
 #include "stm32f4xx_hal.h"
 
-typedef __packed struct{
+typedef struct
+{
   uint16_t position;
   int16_t w;
   int16_t current;
   int8_t temperature;
   int16_t prePosition;
-}MotoInfo_t;
+} __PACKED MotoInfo_t;
 
 extern MotoInfo_t motoInfo[4];
 extern int can2Flag;
