@@ -276,10 +276,10 @@ void ProtocolTaskInit(void)
   osMailQDef(ProtocolTxMail, PROTOCOL_MSG_QUENE_SIZE, ProtocolMsg_t);
   ProtocolTxMail = osMailCreate(osMailQ(ProtocolTxMail), NULL);
   
-  osThreadDef(ProtocolRecvTask, ProtocolRecvTaskEntry, osPriorityAboveNormal, 0, 128);
+  osThreadDef(ProtocolRecvTask, ProtocolRecvTaskEntry, osPriorityAboveNormal, 0, 512);
   ProtocolRecvTaskHandle = osThreadCreate(osThread(ProtocolRecvTask), NULL);
   
-  osThreadDef(ProtocolSendTask, ProtocolSendTaskEntry, osPriorityAboveNormal, 0, 128);
+  osThreadDef(ProtocolSendTask, ProtocolSendTaskEntry, osPriorityAboveNormal, 0, 512);
   ProtocolSendTaskHandle = osThreadCreate(osThread(ProtocolSendTask), NULL);
 }
 

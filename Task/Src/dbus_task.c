@@ -92,6 +92,6 @@ void DbusTaskInit(void)
   DbusMail = osMailCreate(osMailQ(DbusMail), NULL);
   osMailQDef(CtrlMail, CTRL_MSG_QUENE_SIZE, MotionCtrl_t);
   CtrlMail = osMailCreate(osMailQ(CtrlMail), NULL);
-  osThreadDef(DbusTask, DbusTaskEntry, osPriorityAboveNormal, 0, 128);
+  osThreadDef(DbusTask, DbusTaskEntry, osPriorityAboveNormal, 0, 512);
   DbusTaskHandle = osThreadCreate(osThread(DbusTask), NULL);
 }
