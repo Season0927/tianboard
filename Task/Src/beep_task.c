@@ -6,12 +6,12 @@
 
 osThreadId BeepTaskHandle;
 osMailQId BeepMail;
-
+osMailQDef(BeepMail, BEEP_MSG_QUENE_SIZE, BeepMsg_t);
 void Beep(uint8_t sound, uint8_t time)
 {
   BeepMsg_t *p;
   p = osMailAlloc(BeepMail, 0);
-  if(p != NULL)
+  if (p != NULL)
   {
     p->sound = sound;
     p->time = time;
@@ -19,17 +19,17 @@ void Beep(uint8_t sound, uint8_t time)
   }
 }
 
-static void BeepTaskEntry(void const * argument)
+static void BeepTaskEntry(void const *argument)
 {
   osEvent evt;
   BeepMsg_t *p;
   /* Infinite loop */
   BeepOff();
-  for(;;)
+  for (;;)
   {
     evt = osMailGet(BeepMail, osWaitForever);
-    if (evt.status == osEventMail) 
-    {       
+    if (evt.status == osEventMail)
+    {
       p = evt.value.p;
       BeepOn(p->sound);
       osDelay(p->time);
@@ -41,9 +41,8 @@ static void BeepTaskEntry(void const * argument)
 
 void BeepTaskInit(void)
 {
-  osMailQDef(BeepMail, BEEP_MSG_QUENE_SIZE, BeepMsg_t);
   BeepMail = osMailCreate(osMailQ(BeepMail), NULL);
-  
+
   osThreadDef(BeepTask, BeepTaskEntry, osPriorityAboveNormal, 0, 128);
   BeepTaskHandle = osThreadCreate(osThread(BeepTask), NULL);
 }
