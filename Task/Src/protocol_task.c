@@ -197,8 +197,6 @@ static void ProtocolProcess(uint8_t *Buf, uint8_t Len)
   }
 }
 
-int message_process = 0;
-
 static void ProtocolRecvTaskEntry(void const *argument)
 {
   osEvent evt;
@@ -220,7 +218,6 @@ static void ProtocolRecvTaskEntry(void const *argument)
         ProtocolProcess(p->Msg, p->MsgLen);
       }
       osMailFree(ProtocolRxMail, p);
-      message_process++;
     }
     else if (evt.status == osEventTimeout)
     {

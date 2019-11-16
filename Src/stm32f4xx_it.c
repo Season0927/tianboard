@@ -282,7 +282,6 @@ void USART1_IRQHandler(void)
     if (pDbusMsg == NULL)
     {
       //error
-      __asm("nop");
     }
     else
     {
@@ -315,7 +314,6 @@ void USART2_IRQHandler(void)
     if (pTerminalMsg == NULL)
     {
       //error
-      __asm("nop");
     }
   }
   if (USART2->SR & UART_FLAG_TC)
@@ -389,7 +387,6 @@ void CAN2_RX0_IRQHandler(void)
 /**
   * @brief This function handles UART7 global interrupt.
   */
- int message_in = 0;
 void UART7_IRQHandler(void)
 {
   /* USER CODE BEGIN UART7_IRQn 0 */
@@ -409,11 +406,9 @@ void UART7_IRQHandler(void)
       osMailPut(ProtocolRxMail, pProtocolMsg);
     }
     pProtocolMsg = osMailAlloc(ProtocolRxMail, 0);
-    message_in++;
     if (pProtocolMsg == NULL)
     {
       //error
-      __asm("nop");
     }
     else
     {
