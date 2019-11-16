@@ -15,7 +15,7 @@ const Param_t DefaultParam = {
   {15, 0.2, 0.3, 16384.0, 16384.0},//p i d max_output i_limit
   5,//ctrl periodsss
   20,//feedback period
-  20,//pose calc period
+  10,//pose calc period
   "default",
   PARAM_TAIL
 };
