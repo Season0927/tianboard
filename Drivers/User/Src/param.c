@@ -13,9 +13,9 @@ const Param_t DefaultParam = {
   BASE_TYPE_MECANUM,//base_type
   {{130.0, 140.0},{10.0}},//{base_a, base_b} {base_r}
   {15, 0.2, 0.3, 16384.0, 16384.0},//p i d max_output i_limit
-  2,//ctrl periodsss
-  10,//feedback period
-  2,//pose calc period
+  5,//ctrl periodsss
+  20,//feedback period
+  20,//pose calc period
   "default",
   PARAM_TAIL
 };
