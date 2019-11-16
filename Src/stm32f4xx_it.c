@@ -268,6 +268,8 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 1 */
   if (USART1->SR & UART_FLAG_IDLE)
   {
+    uint8_t temp = USART1->DR;
+    UNUSED(temp);
     HAL_UART_AbortReceive(&huart1);
 
     if (pDbusMsg != NULL)
@@ -280,6 +282,7 @@ void USART1_IRQHandler(void)
     if (pDbusMsg == NULL)
     {
       //error
+      __asm("nop");
     }
     else
     {
@@ -312,6 +315,7 @@ void USART2_IRQHandler(void)
     if (pTerminalMsg == NULL)
     {
       //error
+      __asm("nop");
     }
   }
   if (USART2->SR & UART_FLAG_TC)
@@ -385,6 +389,7 @@ void CAN2_RX0_IRQHandler(void)
 /**
   * @brief This function handles UART7 global interrupt.
   */
+ int message_in = 0;
 void UART7_IRQHandler(void)
 {
   /* USER CODE BEGIN UART7_IRQn 0 */
@@ -394,6 +399,8 @@ void UART7_IRQHandler(void)
   /* USER CODE BEGIN UART7_IRQn 1 */
   if (UART7->SR & UART_FLAG_IDLE)
   {
+    uint8_t temp = UART7->DR;
+    UNUSED(temp);
     HAL_UART_AbortReceive(&huart7);
     if (pProtocolMsg != NULL)
     {
@@ -402,9 +409,11 @@ void UART7_IRQHandler(void)
       osMailPut(ProtocolRxMail, pProtocolMsg);
     }
     pProtocolMsg = osMailAlloc(ProtocolRxMail, 0);
+    message_in++;
     if (pProtocolMsg == NULL)
     {
       //error
+      __asm("nop");
     }
     else
     {

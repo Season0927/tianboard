@@ -86,11 +86,11 @@ static void DbusTaskEntry(void const *argument)
     }
   }
 }
-
+osThreadDef(DbusTask, DbusTaskEntry, osPriorityRealtime, 0, 512);
 void DbusTaskInit(void)
 {
   DbusMail = osMailCreate(osMailQ(DbusMail), NULL);
   CtrlMail = osMailCreate(osMailQ(CtrlMail), NULL);
-  osThreadDef(DbusTask, DbusTaskEntry, osPriorityRealtime, 0, 512);
+
   DbusTaskHandle = osThreadCreate(osThread(DbusTask), NULL);
 }

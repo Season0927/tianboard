@@ -197,6 +197,8 @@ static void ProtocolProcess(uint8_t *Buf, uint8_t Len)
   }
 }
 
+int message_process = 0;
+
 static void ProtocolRecvTaskEntry(void const *argument)
 {
   osEvent evt;
@@ -218,6 +220,7 @@ static void ProtocolRecvTaskEntry(void const *argument)
         ProtocolProcess(p->Msg, p->MsgLen);
       }
       osMailFree(ProtocolRxMail, p);
+      message_process++;
     }
     else if (evt.status == osEventTimeout)
     {
@@ -267,16 +270,14 @@ static void ProtocolSendTaskEntry(void const *argument)
     }
   }
 }
-
+osThreadDef(ProtocolRecvTask, ProtocolRecvTaskEntry, osPriorityRealtime, 0, 512);
+osThreadDef(ProtocolSendTask, ProtocolSendTaskEntry, osPriorityAboveNormal, 0, 512);
 void ProtocolTaskInit(void)
 {
   ProtocolRxMail = osMailCreate(osMailQ(ProtocolRxMail), NULL);
   ProtocolTxMail = osMailCreate(osMailQ(ProtocolTxMail), NULL);
 
-  osThreadDef(ProtocolRecvTask, ProtocolRecvTaskEntry, osPriorityRealtime, 0, 512);
   ProtocolRecvTaskHandle = osThreadCreate(osThread(ProtocolRecvTask), NULL);
-
-  osThreadDef(ProtocolSendTask, ProtocolSendTaskEntry, osPriorityAboveNormal, 0, 512);
   ProtocolSendTaskHandle = osThreadCreate(osThread(ProtocolSendTask), NULL);
 }
 

@@ -8,7 +8,7 @@
 typedef struct{
 	uint16_t sound;
 	uint16_t time;
-}BeepMsg_t;
+} __PACKED BeepMsg_t;
 
 #define BEEP_MSG_QUENE_SIZE 10
 

@@ -38,11 +38,10 @@ static void BeepTaskEntry(void const *argument)
     }
   }
 }
-
+osThreadDef(BeepTask, BeepTaskEntry, osPriorityAboveNormal, 0, 128);
 void BeepTaskInit(void)
 {
   BeepMail = osMailCreate(osMailQ(BeepMail), NULL);
 
-  osThreadDef(BeepTask, BeepTaskEntry, osPriorityAboveNormal, 0, 128);
   BeepTaskHandle = osThreadCreate(osThread(BeepTask), NULL);
 }

@@ -480,12 +480,14 @@ void TerminalTxTaskEntry(void const *argument)
   /* USER CODE END SerialTxTaskEntry */
 }
 
+osThreadDef(TerminalRxTask, TerminalRxTaskEntry, osPriorityAboveNormal, 0, 512);
+osThreadDef(TerminalTxTask, TerminalTxTaskEntry, osPriorityHigh, 0, 512);
+
 void TerminalTaskInit(void)
 {
   TerminalRxMail = osMailCreate(osMailQ(TerminalRxMail), NULL);
   TerminalTxMail = osMailCreate(osMailQ(TerminalTxMail), NULL);
-  osThreadDef(TerminalRxTask, TerminalRxTaskEntry, osPriorityAboveNormal, 0, 512);
+
   TerminalRxTaskHandle = osThreadCreate(osThread(TerminalRxTask), NULL);
-  osThreadDef(TerminalTxTask, TerminalTxTaskEntry, osPriorityHigh, 0, 512);
   TerminalTxTaskHandle = osThreadCreate(osThread(TerminalTxTask), NULL);
 }
